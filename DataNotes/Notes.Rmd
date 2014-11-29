@@ -1,0 +1,52 @@
+Looking at Taylor Data
+========================================================
+Load in the data
+```{r}
+Original <- read.csv("~/Research/CRTOveruse/OriginalData/Original.csv")
+```
+
+Manipulations based on description
+```{r}
+#Fix the ids
+Original$id<-as.factor(Original$id)
+
+#make a logical out of the treatment variable
+Original$HypoTRUE<-ifelse(Original$treatment=='1',TRUE,FALSE)
+
+#Recode the dummy variable sequence for major
+Original$Major<-NA
+Original$Major[Original$dum_major1=='1']<-"Econ"
+Original$Major[Original$dum_major2=='1']<-"Env"
+Original$Major[Original$dum_major3=='1']<-"Sci"
+Original$Major[Original$dum_major4=='1']<-"Bus"
+Original$Major[Original$dum_major5=='1']<-"Other"
+Original$Major<-as.factor(Original$Major)
+
+#Recode responses as logicals
+Original$safereal1<-as.logical(Original$safereal1)
+Original$safereal2<-as.logical(Original$safereal2)
+Original$safereal3<-as.logical(Original$safereal3)
+Original$safereal4<-as.logical(Original$safereal4)
+Original$safereal5<-as.logical(Original$safereal5)
+Original$safereal6<-as.logical(Original$safereal6)
+Original$safereal7<-as.logical(Original$safereal7)
+Original$safereal8<-as.logical(Original$safereal8)
+Original$safereal9<-as.logical(Original$safereal9)
+Original$safereal10<-as.logical(Original$safereal10)
+
+Original$safehypot1<-as.logical(Original$safehypot1)
+Original$safehypot2<-as.logical(Original$safehypot2)
+Original$safehypot3<-as.logical(Original$safehypot3)
+Original$safehypot4<-as.logical(Original$safehypot4)
+Original$safehypot5<-as.logical(Original$safehypot5)
+Original$safehypot6<-as.logical(Original$safehypot6)
+Original$safehypot7<-as.logical(Original$safehypot7)
+Original$safehypot8<-as.logical(Original$safehypot8)
+Original$safehypot9<-as.logical(Original$safehypot9)
+Original$safehypot10<-as.logical(Original$safehypot10)
+
+summary(Original)
+```
+There could be some tricks because Taylor added some noise to the choices and I don't know the exact noise.
+
+
