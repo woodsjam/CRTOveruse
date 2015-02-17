@@ -1,0 +1,30 @@
+\documentclass{article}
+\author{James Woods}
+\title{Who Doesn't Know How Much the Ball Costs?:  Overuse of Common Questions in Choice Experiments}
+
+
+\begin{document}
+\maketitle
+\SweaveOpts{concordance=TRUE}
+
+\begin{abstract}
+
+Our experimental population, our participants, are a limited resource.  Each time we go into the field with a survey or an experiment and use a common battery of questions, their familiarity with those questions biases responses and can alter our conclusions.  We show that for a common battery of questions, Frederick's three-question Cognitive Reflection Test (CRT),  that participants in several populations, are familiar with the questions and that this bias the correct response rate.  We propose a method for adapting to this phenomena, demonstrate the effects using data from a recent publication and discuss ways that researchers can mitigate effects in the future.
+
+\end{abstract}
+
+
+\section{Introduction}
+
+\section{Use of CRT and Response Trends}
+
+\section{Statistical Correction for CRT Overstatement}
+
+\section{Comparison of Results}
+
+\section{Future Work}
+
+
+
+
+\end{document}
