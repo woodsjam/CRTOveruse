@@ -2,7 +2,10 @@ Looking at Taylor Data
 ========================================================
 Load in the data
 ```{r}
-Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
+# Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
+
+Original <- read.csv("OriginalData/Original.csv")
+
 ```
 
 Manipulations based on description
@@ -48,5 +51,9 @@ Original$safehypot10<-as.logical(Original$safehypot10)
 summary(Original)
 ```
 There could be some tricks because Taylor added some noise to the choices and I don't know the exact noise.
+
+Back on the estimator.
+
+
 
 
