@@ -4,7 +4,7 @@ Load in the data
 ```{r}
 # Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
 
-Original <- read.csv("OriginalData/Original.csv")
+Original <- read.csv("~/Research/CRTOveruse/OriginalData/Original.csv")
 
 ```
 
@@ -24,6 +24,10 @@ Original$Major[Original$dum_major3=='1']<-"Sci"
 Original$Major[Original$dum_major4=='1']<-"Bus"
 Original$Major[Original$dum_major5=='1']<-"Other"
 Original$Major<-as.factor(Original$Major)
+
+# Testing out how to use other distributions for estimator.
+
+
 
 #Recode responses as logicals
 Original$safereal1<-as.logical(Original$safereal1)
@@ -52,7 +56,24 @@ summary(Original)
 ```
 There could be some tricks because Taylor added some noise to the choices and I don't know the exact noise.
 
-Back on the estimator.
+
+# Prototype an estimator
+
+Just trying to get the mle2 function working.
+```{r}
+library(bbmle)
+
+
+gamma.fit<-function(a1,a2,gShape){
+  predicted.value<-safereal1-a1-a2*dum_major1
+  -sum(dgamma(predicted.value,shape=gShape))  
+}
+
+est<-mle2(gamma.fit,start=list(a1=-2,a2=2,gShape=1/5),data=Original)
+summary(est)
+```
+
+Now that it is working, lets start on the method that Taylor uses and create the right objective function.
 
 
 
