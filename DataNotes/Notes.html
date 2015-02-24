@@ -436,6 +436,61 @@ est&lt;-mle2(gamma.fit,start=list(a1=-2,a2=2,gShape=1/5),data=Original)
 
 <p>Now that it is working, lets start on the method that Taylor uses and create the right objective function.</p>
 
+<h1>More formal code for estimator</h1>
+
+<p>Functions we will need.</p>
+
+<pre><code class="r"># the utility function
+CRRA&lt;-function(w,r){w^(1-r)/(1-r)}
+
+#expected utility of lottery
+EU&lt;-function(w1,u1,w2,u2){(w1*u1) +(w2*u2)}
+
+#The two latent variable specifications.  
+Fechner&lt;-function(UtilityL, UtilityR, mu){
+  (UtilityR-UtilityL)/mu
+}
+
+Luce&lt;-function(UtilityL, UtilityR, mu){
+  UtilityR^(1/mu)/(UtilityR^(1/mu) +UtilityL^(1/mu))
+}
+</code></pre>
+
+<p>Note that taylor only got Fechner to really work on the data because of convergence issues.</p>
+
+<p>We need the values of the lotteries.  Here are the choices from table 1 of Taylor&#39;s paper.  The safe gambles are for $40 and $32 and the risky is $77 and $2.  Note that they added some noise to the values so these are just expectations.</p>
+
+<pre><code class="r">Choices&lt;-data.frame(
+  rbind(c(1, 0.1, 0.9, 0.1, 0.9, 32.80, 9.50),
+        c(2, 0.2, 0.8, 0.2, 0.8, 33.60, 17.00),
+        c(3, 0.3, 0.7, 0.3, 0.7, 34.40, 24.80),
+        c(4, 0.4, 0.6, 0.4, 0.6, 35.20, 32.00),
+        c(5, 0.5, 0.5, 0.5, 0.5, 36.00, 39.50),
+        c(6, 0.6, 0.4, 0.6, 0.4, 36.80, 47.00),
+        c(7, 0.7, 0.3, 0.7, 0.3, 37.60, 54.50),
+        c(8, 0.8, 0.2, 0.8, 0.2, 38.40, 62.00),
+        c(9, 0.9, 0.1, 0.9, 0.1, 39.20, 69.50),
+        c(10, 1, 0, 1, 0, 40.00, 77.00)
+        )
+  )
+
+names(Choices)&lt;-c(&quot;Choice&quot;,&quot;PSafeHigh&quot;,&quot;PSafeLow&quot;,&quot;PRiskyHigh&quot;,&quot;PRiskyLow&quot;,&quot;ExpectSafe&quot;,&quot;ExpectRisky&quot;)
+</code></pre>
+
+<p>Here is the variable list for both the r and mu equations from the paper.</p>
+
+<ul>
+<li>1(Hypot) </li>
+<li>1(Female) </li>
+<li>1(Female)×1(Hypot)</li>
+<li>CRT Score </li>
+<li>CRT×1(Hypot) </li>
+<li>Numeracy Score </li>
+<li>Numeracy×1(Hypot) </li>
+<li>1(EV-sufficient All Choices) </li>
+<li>1(EV-sufficient All)×1(Hypot) </li>
+</ul>
+
 </body>
 
 </html>

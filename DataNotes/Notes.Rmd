@@ -76,5 +76,68 @@ summary(est)
 Now that it is working, lets start on the method that Taylor uses and create the right objective function.
 
 
+# More formal code for estimator
+
+
+Functions we will need.
+```{r}
+
+# the utility function
+CRRA<-function(w,r){w^(1-r)/(1-r)}
+
+#expected utility of lottery
+EU<-function(w1,u1,w2,u2){(w1*u1) +(w2*u2)}
+
+#The two latent variable specifications.  
+Fechner<-function(UtilityL, UtilityR, mu){
+  (UtilityR-UtilityL)/mu
+}
+
+Luce<-function(UtilityL, UtilityR, mu){
+  UtilityR^(1/mu)/(UtilityR^(1/mu) +UtilityL^(1/mu))
+}
+
+```
+
+Note that taylor only got Fechner to really work on the data because of convergence issues.
+
+
+We need the values of the lotteries.  Here are the choices from table 1 of Taylor's paper.  The safe gambles are for $40 and $32 and the risky is $77 and $2.  Note that they added some noise to the values so these are just expectations.
+
+```{r}
+
+Choices<-data.frame(
+  rbind(c(1, 0.1, 0.9, 0.1, 0.9, 32.80, 9.50),
+        c(2, 0.2, 0.8, 0.2, 0.8, 33.60, 17.00),
+        c(3, 0.3, 0.7, 0.3, 0.7, 34.40, 24.80),
+        c(4, 0.4, 0.6, 0.4, 0.6, 35.20, 32.00),
+        c(5, 0.5, 0.5, 0.5, 0.5, 36.00, 39.50),
+        c(6, 0.6, 0.4, 0.6, 0.4, 36.80, 47.00),
+        c(7, 0.7, 0.3, 0.7, 0.3, 37.60, 54.50),
+        c(8, 0.8, 0.2, 0.8, 0.2, 38.40, 62.00),
+        c(9, 0.9, 0.1, 0.9, 0.1, 39.20, 69.50),
+        c(10, 1, 0, 1, 0, 40.00, 77.00)
+        )
+  )
+
+names(Choices)<-c("Choice","PSafeHigh","PSafeLow","PRiskyHigh","PRiskyLow","ExpectSafe","ExpectRisky")
+
+
+```
+
+
+Here is the variable list for both the r and mu equations from the paper.
+
+
+* 1(Hypot) 
+* 1(Female) 
+* 1(Female)×1(Hypot)
+* CRT Score 
+* CRT×1(Hypot) 
+* Numeracy Score 
+* Numeracy×1(Hypot) 
+* 1(EV-sufficient All Choices) 
+* 1(EV-sufficient All)×1(Hypot) 
+
 
 

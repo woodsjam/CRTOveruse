@@ -37,6 +37,12 @@ Our experimental population, our participants, are a limited resource.  Each tim
     \item The gamma distribution is the easiest to use.  It is >0 and can be zero, no deception, if need be.  So, it nests the truthfulnes case.
     \item The scale interacts with the paramter on the CRT in the model, so odd things can happen.  
   \end{enumerate}
+  
+  
+  
+\begin{equation}\label{eq:CRRA}
+u(w) = \frac{w^{1-r}}{(1-r)}
+\end{equation}
 
 \section{Comparison of Results}
 
