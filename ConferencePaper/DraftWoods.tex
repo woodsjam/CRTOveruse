@@ -16,15 +16,82 @@ Our experimental population, our participants, are a limited resource.  Each tim
 
 
 \section{Introduction}
+  
+  \begin{enumerate}
+    \item Lots of surprising results in the literature in particular that the CRT is not relelevent in some senses.
+    \item evidence that it is being over used
+    \item pitch that with messy experiments we have to use more sophisticated statistics
+  \end{enumerate}
 
 \section{Use of CRT and Response Trends}
+  
+  \begin{enumerate}
+      \item  Add hoc observations
+      \item current trends published
+      \item as current research by those guys in the email.
+  \end{enumerate}
 
 \section{Statistical Correction for CRT Overstatement}
 
+  \begin{enumerate}
+    \item key is to have the count of CRT correct and overstatement, i.e., actual count + a random varible for the deception.
+    \item The gamma distribution is the easiest to use.  It is >0 and can be zero, no deception, if need be.  So, it nests the truthfulnes case.
+    \item The scale interacts with the paramter on the CRT in the model, so odd things can happen.  
+  \end{enumerate}
+
 \section{Comparison of Results}
+
+  \begin{enumerate}
+  \item using data from \cite{taylor2013bias}
+    \item Simple case in logit or probit modeling.  Gamma is just nested and still identifiable.
+    \item maximum likelhood estimate yields.
+    \item compare to without gamma.
+  \end{enumerate}
+
+  \subsection{Luce Specification}
+  
+\begin{equation}
+\frac{EU_R^{\frac{1}{\mu}}}{EU_L^{\frac{1}{\mu}}-EU_R^{\frac{1}{\mu}}}
+\end{equation}
+    
+    \begin{enumerate}
+      \item  No need to wrap the Luce spec in a normal CDF.
+      \item Warning the distributions are not well behaved since the difference of two gammas is a tricky little distribution.
+      \item Compare the two results.
+    \end{enumerate}
+
+
+
+  \subsection{Fechner Specification}
+
+  
+  
+\begin{equation}
+\frac{EU_R^{\frac{1}{\mu}}-EU_L^{\frac{1}{\mu}}}{\mu}
+\end{equation}
+
+
+    \begin{enumerate}
+      \item  Need to wrap in a normal CDF.
+      \item Warning the distributions are not well behaved since the difference of two gammas is a tricky little distribution.
+      \item Compare the two results.
+    \end{enumerate}
+
 
 \section{Future Work}
 
+
+% BibTeX users please use one of
+%\bibliographystyle{spbasic}      % basic style, author-year citations
+%\bibliographystyle{spmpsci}      % mathematics and physical sciences
+%\bibliographystyle{spphys}       % APS-like style for physics
+%\bibliography{}   % name your BibTeX data base
+
+% Non-BibTeX users please use
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{FullBib}
 
 
 
