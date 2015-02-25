@@ -2,9 +2,9 @@ Looking at Taylor Data
 ========================================================
 Load in the data
 ```{r}
-# Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
+ Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
 
-Original <- read.csv("~/Research/CRTOveruse/OriginalData/Original.csv")
+#Original <- read.csv("~/Research/CRTOveruse/OriginalData/Original.csv")
 
 ```
 
@@ -138,9 +138,18 @@ MinimalSubset<-Original[,c("id","crt","treatment","safereal1","safereal2","safer
 library(reshape2)
 
 #Turn this into long form.
+LongForm<-melt(MinimalSubset,id.vars=c('id','treatment','crt'))
 
+LongForm$Choice<-LongForm$variable
 
+library(stringr)
+LongForm$Choice<-str_replace(LongForm$Choice,'safereal','')
+LongForm$Choice<-str_replace(LongForm$Choice,'safehypot','')
+LongForm$Choice<-as.factor(LongForm$Choice)
 #Add values from the Choices table
 
+LongForm<-merge(LongForm, Choices[,c('Choice','ExpectSafe','ExpectRisky')], by='Choice')
+
+summary(LongForm)
 ```
 
