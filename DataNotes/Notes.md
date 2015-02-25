@@ -127,176 +127,6 @@ There could be some tricks because Taylor added some noise to the choices and I 
 
 # Prototype an estimator
 
-Just trying to get the mle2 function working.
-
-```r
-library(bbmle)
-```
-
-```
-## Loading required package: stats4
-```
-
-```r
-gamma.fit<-function(a1,a2,gShape){
-  predicted.value<-safereal1-a1-a2*dum_major1
-  -sum(dgamma(predicted.value,shape=gShape))  
-}
-
-est<-mle2(gamma.fit,start=list(a1=-2,a2=2,gShape=1/5),data=Original)
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```
-## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-```
-
-```r
-summary(est)
-```
-
-```
-## Maximum likelihood estimation
-## 
-## Call:
-## mle2(minuslogl = gamma.fit, start = list(a1 = -2, a2 = 2, gShape = 1/5), 
-##     data = Original)
-## 
-## Coefficients:
-##          Estimate Std. Error    z value     Pr(z)    
-## a1     9.9970e-01 6.7424e-05 1.4827e+04 < 2.2e-16 ***
-## a2     2.8754e+00 3.9948e-22 7.1980e+21 < 2.2e-16 ***
-## gShape 1.3227e-01 1.1381e-03 1.1622e+02 < 2.2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## -2 log L: -26390.66
-```
-
-Now that it is working, lets start on the method that Taylor uses and create the right objective function.
-
-
-# More formal code for estimator
-
 
 Functions we will need.
 
@@ -356,4 +186,26 @@ Here is the variable list for both the r and mu equations from the paper.
 * 1(EV-sufficient All)×1(Hypot) 
 
 
+Note that EV-sufficient variable and Numeracy are missing so I will ommit.  He also does not use major, which he has given, me but does use gender, which he has not.  I can't replicate so I will use what I can.
+
+* 1(Hypot) 
+* CRT Score 
+* CRT×1(Hypot) 
+
+The limited list makes it easy and I can avoid stepping on toes.
+
+Lets get the dataset into shape.
+
+```r
+#Just the variables that I need
+
+MinimalSubset<-Original[,c("id","crt","treatment","safereal1","safereal2","safereal3","safereal4","safereal5","safereal6","safereal7","safereal8","safereal9","safereal10","safehypot1","safehypot2","safehypot3","safehypot4","safehypot5","safehypot6","safehypot7","safehypot8","safehypot9","safehypot10")]
+
+library(reshape2)
+
+#Turn this into long form.
+
+
+#Add values from the Choices table
+```
 

@@ -305,139 +305,6 @@ summary(Original)
 
 <h1>Prototype an estimator</h1>
 
-<p>Just trying to get the mle2 function working.</p>
-
-<pre><code class="r">library(bbmle)
-</code></pre>
-
-<pre><code>## Loading required package: stats4
-</code></pre>
-
-<pre><code class="r">gamma.fit&lt;-function(a1,a2,gShape){
-  predicted.value&lt;-safereal1-a1-a2*dum_major1
-  -sum(dgamma(predicted.value,shape=gShape))  
-}
-
-est&lt;-mle2(gamma.fit,start=list(a1=-2,a2=2,gShape=1/5),data=Original)
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code>## Warning in dgamma(predicted.value, shape = gShape): NaNs produced
-</code></pre>
-
-<pre><code class="r">summary(est)
-</code></pre>
-
-<pre><code>## Maximum likelihood estimation
-## 
-## Call:
-## mle2(minuslogl = gamma.fit, start = list(a1 = -2, a2 = 2, gShape = 1/5), 
-##     data = Original)
-## 
-## Coefficients:
-##          Estimate Std. Error    z value     Pr(z)    
-## a1     9.9970e-01 6.7424e-05 1.4827e+04 &lt; 2.2e-16 ***
-## a2     2.8754e+00 3.9948e-22 7.1980e+21 &lt; 2.2e-16 ***
-## gShape 1.3227e-01 1.1381e-03 1.1622e+02 &lt; 2.2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## -2 log L: -26390.66
-</code></pre>
-
-<p>Now that it is working, lets start on the method that Taylor uses and create the right objective function.</p>
-
-<h1>More formal code for estimator</h1>
-
 <p>Functions we will need.</p>
 
 <pre><code class="r"># the utility function
@@ -490,6 +357,30 @@ names(Choices)&lt;-c(&quot;Choice&quot;,&quot;PSafeHigh&quot;,&quot;PSafeLow&quo
 <li>1(EV-sufficient All Choices) </li>
 <li>1(EV-sufficient All)×1(Hypot) </li>
 </ul>
+
+<p>Note that EV-sufficient variable and Numeracy are missing so I will ommit.  He also does not use major, which he has given, me but does use gender, which he has not.  I can&#39;t replicate so I will use what I can.</p>
+
+<ul>
+<li>1(Hypot) </li>
+<li>CRT Score </li>
+<li>CRT×1(Hypot) </li>
+</ul>
+
+<p>The limited list makes it easy and I can avoid stepping on toes.</p>
+
+<p>Lets get the dataset into shape.</p>
+
+<pre><code class="r">#Just the variables that I need
+
+MinimalSubset&lt;-Original[,c(&quot;id&quot;,&quot;crt&quot;,&quot;treatment&quot;,&quot;safereal1&quot;,&quot;safereal2&quot;,&quot;safereal3&quot;,&quot;safereal4&quot;,&quot;safereal5&quot;,&quot;safereal6&quot;,&quot;safereal7&quot;,&quot;safereal8&quot;,&quot;safereal9&quot;,&quot;safereal10&quot;,&quot;safehypot1&quot;,&quot;safehypot2&quot;,&quot;safehypot3&quot;,&quot;safehypot4&quot;,&quot;safehypot5&quot;,&quot;safehypot6&quot;,&quot;safehypot7&quot;,&quot;safehypot8&quot;,&quot;safehypot9&quot;,&quot;safehypot10&quot;)]
+
+library(reshape2)
+
+#Turn this into long form.
+
+
+#Add values from the Choices table
+</code></pre>
 
 </body>
 
