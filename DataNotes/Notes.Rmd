@@ -187,3 +187,24 @@ summary(lm(Y~X1+X2,data=Fake))
 Bias all over the place.
 
 Now lets get an estimator in place for this linear model
+
+```{r}
+
+Augment<-function(variable, shape, rate){
+  variable-rgamma(length(variable), shape, rate)
+}
+
+summary(lm(Y~X1+Augment(X2,2,2),data=Fake))
+
+```
+
+So, even with the shape and rate paramters known with certainty, I don't find the true parameter on the X2 variable.  
+
+Lets run it a few times to make sure.  It may show up as an expectation.
+
+```{r}
+
+summary(replicate(400,lm(Y~X1+Augment(X2,2,2),data=Fake)$coef[3]))
+
+```
+and the answer is no.

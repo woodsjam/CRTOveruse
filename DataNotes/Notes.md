@@ -3,7 +3,7 @@ Looking at Taylor Data
 Load in the data
 
 ```r
-# Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
+#Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
 
 Original <- read.csv("~/Research/CRTOveruse/OriginalData/Original.csv")
 ```
@@ -204,8 +204,156 @@ MinimalSubset<-Original[,c("id","crt","treatment","safereal1","safereal2","safer
 library(reshape2)
 
 #Turn this into long form.
+LongForm<-melt(MinimalSubset,id.vars=c('id','treatment','crt'))
 
+LongForm$Choice<-LongForm$variable
 
+library(stringr)
+LongForm$Choice<-str_replace(LongForm$Choice,'safereal','')
+LongForm$Choice<-str_replace(LongForm$Choice,'safehypot','')
+LongForm$Choice<-as.factor(LongForm$Choice)
 #Add values from the Choices table
+
+LongForm<-merge(LongForm, Choices[,c('Choice','ExpectSafe','ExpectRisky')], by='Choice')
+
+summary(LongForm)
 ```
 
+```
+##      Choice          id         treatment           crt       
+##  1      :194   1      :  20   Min.   :0.0000   Min.   :0.000  
+##  10     :194   2      :  20   1st Qu.:0.0000   1st Qu.:0.000  
+##  2      :194   3      :  20   Median :1.0000   Median :1.000  
+##  3      :194   4      :  20   Mean   :0.5052   Mean   :1.268  
+##  4      :194   5      :  20   3rd Qu.:1.0000   3rd Qu.:2.000  
+##  5      :194   6      :  20   Max.   :1.0000   Max.   :3.000  
+##  (Other):776   (Other):1820                                   
+##       variable      value           ExpectSafe    ExpectRisky   
+##  safereal1:  97   Mode :logical   Min.   :32.8   Min.   : 9.50  
+##  safereal2:  97   FALSE:737       1st Qu.:34.4   1st Qu.:24.80  
+##  safereal3:  97   TRUE :1203      Median :36.4   Median :43.25  
+##  safereal4:  97   NA's :0         Mean   :36.4   Mean   :43.28  
+##  safereal5:  97                   3rd Qu.:38.4   3rd Qu.:62.00  
+##  safereal6:  97                   Max.   :40.0   Max.   :77.00  
+##  (Other)  :1358
+```
+
+That should be in a usable form now.
+
+# Test of simulator estimator for a linear model
+
+I asked on stackexchange if anyone had a reference for errors in variables when the distribution of the error was known.  Until an answer showes up, I will work with a simulation estimator.
+
+
+Fake data for test.
+
+
+```r
+Fake<-data.frame(rnorm(100),rnorm(100))
+names(Fake)<-c('X1','XTrue')
+
+Fake$Noise<-rgamma(100,shape=2, rate=2)
+Fake$X2<-Fake$XTrue+Fake$Noise
+
+Fake$epsilon<-rnorm(100)
+
+Fake$Y<- 10 + 5*Fake$X1 + 3*Fake$XTrue +Fake$epsilon
+
+summary(Fake)
+```
+
+```
+##        X1               XTrue             Noise               X2          
+##  Min.   :-2.75640   Min.   :-2.9102   Min.   :0.06037   Min.   :-1.55570  
+##  1st Qu.:-0.72085   1st Qu.:-0.9872   1st Qu.:0.41508   1st Qu.:-0.08269  
+##  Median :-0.07147   Median :-0.1244   Median :0.65608   Median : 0.70373  
+##  Mean   :-0.07490   Mean   :-0.1408   Mean   :0.90161   Mean   : 0.76080  
+##  3rd Qu.: 0.67081   3rd Qu.: 0.5522   3rd Qu.:1.21436   3rd Qu.: 1.43481  
+##  Max.   : 3.14674   Max.   : 3.3569   Max.   :3.38720   Max.   : 3.84149  
+##     epsilon               Y         
+##  Min.   :-2.79412   Min.   :-7.007  
+##  1st Qu.:-0.85250   1st Qu.: 4.714  
+##  Median :-0.08326   Median : 8.605  
+##  Mean   :-0.13391   Mean   : 9.069  
+##  3rd Qu.: 0.56239   3rd Qu.:13.494  
+##  Max.   : 2.69731   Max.   :25.525
+```
+
+Lets see what OLS turns up
+
+
+```r
+summary(lm(Y~X1+X2,data=Fake))
+```
+
+```
+## 
+## Call:
+## lm(formula = Y ~ X1 + X2, data = Fake)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -7.525 -1.558  0.538  1.564  3.786 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   7.5790     0.2748   27.58   <2e-16 ***
+## X1            4.6678     0.2141   21.80   <2e-16 ***
+## X2            2.4182     0.1995   12.12   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.283 on 97 degrees of freedom
+## Multiple R-squared:  0.8673,	Adjusted R-squared:  0.8645 
+## F-statistic: 316.9 on 2 and 97 DF,  p-value: < 2.2e-16
+```
+
+Bias all over the place.
+
+Now lets get an estimator in place for this linear model
+
+
+```r
+Augment<-function(variable, shape, rate){
+  variable-rgamma(length(variable), shape, rate)
+}
+
+summary(lm(Y~X1+Augment(X2,2,2),data=Fake))
+```
+
+```
+## 
+## Call:
+## lm(formula = Y ~ X1 + Augment(X2, 2, 2), data = Fake)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.1602 -1.7793 -0.0154  1.5777  8.5351 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)         9.8893     0.2997  32.997  < 2e-16 ***
+## X1                  4.6481     0.2739  16.968  < 2e-16 ***
+## Augment(X2, 2, 2)   1.5133     0.2095   7.223 1.15e-10 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.919 on 97 degrees of freedom
+## Multiple R-squared:  0.783,	Adjusted R-squared:  0.7785 
+## F-statistic:   175 on 2 and 97 DF,  p-value: < 2.2e-16
+```
+
+So, even with the shape and rate paramters known with certainty, I don't find the true parameter on the X2 variable.  
+
+Lets run it a few times to make sure.  It may show up as an expectation.
+
+
+```r
+summary(replicate(400,lm(Y~X1+Augment(X2,2,2),data=Fake)$coef[3]))
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   1.359   1.673   1.777   1.777   1.882   2.190
+```
+and the answer is no.
