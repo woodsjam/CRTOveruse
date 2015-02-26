@@ -2,9 +2,9 @@ Looking at Taylor Data
 ========================================================
 Load in the data
 ```{r}
- Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
+#Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
 
-#Original <- read.csv("~/Research/CRTOveruse/OriginalData/Original.csv")
+Original <- read.csv("~/Research/CRTOveruse/OriginalData/Original.csv")
 
 ```
 
@@ -153,3 +153,37 @@ LongForm<-merge(LongForm, Choices[,c('Choice','ExpectSafe','ExpectRisky')], by='
 summary(LongForm)
 ```
 
+That should be in a usable form now.
+
+# Test of simulator estimator for a linear model
+
+I asked on stackexchange if anyone had a reference for errors in variables when the distribution of the error was known.  Until an answer showes up, I will work with a simulation estimator.
+
+
+Fake data for test.
+
+```{r}
+Fake<-data.frame(rnorm(100),rnorm(100))
+names(Fake)<-c('X1','XTrue')
+
+Fake$Noise<-rgamma(100,shape=2, rate=2)
+Fake$X2<-Fake$XTrue+Fake$Noise
+
+Fake$epsilon<-rnorm(100)
+
+Fake$Y<- 10 + 5*Fake$X1 + 3*Fake$XTrue +Fake$epsilon
+
+summary(Fake)
+
+```
+
+Lets see what OLS turns up
+
+```{r}
+summary(lm(Y~X1+X2,data=Fake))
+
+```
+
+Bias all over the place.
+
+Now lets get an estimator in place for this linear model
