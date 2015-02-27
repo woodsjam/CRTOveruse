@@ -2,9 +2,9 @@ Looking at Taylor Data
 ========================================================
 Load in the data
 ```{r}
-#Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
+Original <- read.csv("~/Dropbox/Research/CRTOveruse/OriginalData/Original.csv")
 
-Original <- read.csv("~/Research/CRTOveruse/OriginalData/Original.csv")
+#Original <- read.csv("~/Research/CRTOveruse/OriginalData/Original.csv")
 
 ```
 
@@ -208,3 +208,56 @@ summary(replicate(400,lm(Y~X1+Augment(X2,2,2),data=Fake)$coef[3]))
 
 ```
 and the answer is no.
+
+## Simulation idea but with discrete overstatement
+
+This plays off a new idea that the overstatement is discrete.  If we model the overstatement as multiplicative then we can't identify, but if we work it as additive we may be able to.
+
+Time for a new Fake dataset
+
+```{r}
+rm(Fake)
+Fake<-data.frame(rnorm(100),rhyper(100, 200,1000,3))
+names(Fake)<-c('X1','XTrue')
+
+Fake$Noise<-rhyper(100, 200,1000,3)
+Fake$X2<-pmin(3,Fake$XTrue+Fake$Noise)
+
+Fake$epsilon<-rnorm(100)
+
+Fake$Y<- 10 + 5*Fake$X1 + 3*Fake$XTrue +Fake$epsilon
+
+summary(Fake)
+
+```
+
+Test the sigmoid wrap
+```{r}
+summary((Fake$X2-1)/(1-exp(-5*(Fake$X2-1))))
+summary((Fake$X2-2)/(1-exp(-5*(Fake$X2-2))))
+summary((Fake$X2-3)/(1-exp(-5*(Fake$X2-3))))
+
+```
+Why NaN?
+
+
+```{r}
+data.frame(Fake$X2, (Fake$X2-1)/(1-exp(-5*(Fake$X2-1))))
+
+(0)/(1-exp(-0))
+```
+
+Because r does not know L'Hospital's Rule.  It breaks when the N is an integer value.  We just need non-integer starting values
+
+Now lets try an estimator
+
+```{r}
+
+summary(nls(Y~alpha+beta1*X1+beta2*(X2-N)/(1-exp(-10*(X2-N))),data=Fake, start=list(alpha=10,beta1=5, beta2=3, N=1.1)))
+
+summary(lm(Y~X1+X2,data=Fake))
+
+```
+This has a fragile convergence radius.  You need to be pretty close to get it to work.  The other thing is that the assumption of an average amount for each, homogenous reduction, is messing things up.
+
+Need to work on the probability of reduction like a tobit model.  A puzzle for another day.
