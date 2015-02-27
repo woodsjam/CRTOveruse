@@ -253,7 +253,7 @@ Now lets try an estimator
 
 ```{r}
 
-summary(nls(Y~alpha+beta1*X1+beta2*(X2-N)/(1-exp(-10*(X2-N))),data=Fake, start=list(alpha=10,beta1=5, beta2=3, N=1.1)))
+# summary(nls(Y~alpha+beta1*X1+beta2*(X2-N)/(1-exp(-10*(X2-N))),data=Fake, start=list(alpha=10,beta1=5, beta2=3, N=1.1)))
 
 summary(lm(Y~X1+X2,data=Fake))
 
@@ -261,3 +261,16 @@ summary(lm(Y~X1+X2,data=Fake))
 This has a fragile convergence radius.  You need to be pretty close to get it to work.  The other thing is that the assumption of an average amount for each, homogenous reduction, is messing things up.
 
 Need to work on the probability of reduction like a tobit model.  A puzzle for another day.
+
+## Different levels of overstatement by level
+
+
+Back with another idea...lets have the cheating paramters be different depending on the observed score.
+
+```{r}
+#Still sigular gradient at start
+summary(nls(Y~alpha+beta1*X1+beta23*I(X2==3)*(X2-N3)/(1-exp(-10*(X2-N3))) +beta22*I(X2==2)*(X2-N2)/(1-exp(-10*(X2-N2)))+beta21*I(X2==1)*(X2-N1)/(1-exp(-10*(X2-N1))),data=Fake, start=list(alpha=10, beta1=5, beta21=1, N1=.1, beta22=2, N2=.2, beta23=3, N3=.3),trace=TRUE))
+
+
+```
+

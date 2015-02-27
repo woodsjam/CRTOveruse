@@ -284,20 +284,20 @@ Fake$epsilon&lt;-rnorm(100)
 Fake$Y&lt;- 10 + 5*Fake$X1 + 3*Fake$XTrue +Fake$epsilon
 
 summary(Fake)</code></pre>
-<pre><code>##        X1               XTrue             Noise                X2        
-##  Min.   :-2.24966   Min.   :-2.7985   Min.   :0.003347   Min.   :-2.795  
-##  1st Qu.:-0.77447   1st Qu.:-0.3584   1st Qu.:0.485336   1st Qu.: 0.470  
-##  Median :-0.22625   Median : 0.3231   Median :0.746999   Median : 1.291  
-##  Mean   :-0.09721   Mean   : 0.3154   Mean   :0.981824   Mean   : 1.297  
-##  3rd Qu.: 0.40391   3rd Qu.: 1.0654   3rd Qu.:1.395610   3rd Qu.: 2.095  
-##  Max.   : 2.85639   Max.   : 2.5362   Max.   :3.498537   Max.   : 4.181  
-##     epsilon               Y         
-##  Min.   :-2.21228   Min.   :-2.168  
-##  1st Qu.:-0.50744   1st Qu.: 6.838  
-##  Median : 0.02817   Median :10.112  
-##  Mean   : 0.05702   Mean   :10.517  
-##  3rd Qu.: 0.51324   3rd Qu.:14.679  
-##  Max.   : 2.44799   Max.   :22.527</code></pre>
+<pre><code>##        X1                XTrue              Noise              X2         
+##  Min.   :-2.372985   Min.   :-2.19203   Min.   :0.1016   Min.   :-1.5705  
+##  1st Qu.:-0.699125   1st Qu.:-0.60804   1st Qu.:0.5063   1st Qu.: 0.2968  
+##  Median :-0.007291   Median :-0.04166   Median :0.8476   Median : 1.0350  
+##  Mean   :-0.024596   Mean   : 0.03651   Mean   :1.0075   Mean   : 1.0440  
+##  3rd Qu.: 0.593753   3rd Qu.: 0.57763   3rd Qu.:1.4449   3rd Qu.: 1.6753  
+##  Max.   : 3.002205   Max.   : 3.16380   Max.   :3.1321   Max.   : 4.8359  
+##     epsilon              Y         
+##  Min.   :-2.3381   Min.   :-7.138  
+##  1st Qu.:-0.6477   1st Qu.: 5.666  
+##  Median : 0.2028   Median : 9.710  
+##  Mean   : 0.1434   Mean   :10.130  
+##  3rd Qu.: 0.9010   3rd Qu.:15.193  
+##  Max.   : 2.4215   Max.   :25.018</code></pre>
 <p>Lets see what OLS turns up</p>
 <pre class="r"><code>summary(lm(Y~X1+X2,data=Fake))</code></pre>
 <pre><code>## 
@@ -306,19 +306,19 @@ summary(Fake)</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -5.6839 -1.0703  0.0813  1.2268  3.6372 
+## -4.8041 -0.9151  0.1389  0.9839  5.0258 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   8.3480     0.2709   30.82   &lt;2e-16 ***
-## X1            4.5715     0.1871   24.44   &lt;2e-16 ***
-## X2            2.0147     0.1493   13.50   &lt;2e-16 ***
+## (Intercept)   8.1212     0.2481   32.73   &lt;2e-16 ***
+## X1            5.5385     0.1978   28.00   &lt;2e-16 ***
+## X2            2.0545     0.1536   13.38   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 1.89 on 97 degrees of freedom
-## Multiple R-squared:  0.8875, Adjusted R-squared:  0.8852 
-## F-statistic: 382.5 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 1.888 on 97 degrees of freedom
+## Multiple R-squared:  0.9165, Adjusted R-squared:  0.9148 
+## F-statistic: 532.2 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Bias all over the place.</p>
 <p>Now lets get an estimator in place for this linear model</p>
 <pre class="r"><code>Augment&lt;-function(variable, shape, rate){
@@ -332,24 +332,24 @@ summary(lm(Y~X1+Augment(X2,2,2),data=Fake))</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -7.0211 -1.4545  0.1302  1.5626  5.8615 
+## -5.8442 -1.5825 -0.2396  1.6650  7.7394 
 ## 
 ## Coefficients:
 ##                   Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)        10.6972     0.2324  46.035  &lt; 2e-16 ***
-## X1                  4.6827     0.2279  20.543  &lt; 2e-16 ***
-## Augment(X2, 2, 2)   1.5200     0.1584   9.594 1.01e-15 ***
+## (Intercept)         9.9905     0.2448  40.810   &lt;2e-16 ***
+## X1                  5.5308     0.2550  21.685   &lt;2e-16 ***
+## Augment(X2, 2, 2)   1.4316     0.1707   8.388    4e-13 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 2.297 on 97 degrees of freedom
-## Multiple R-squared:  0.8338, Adjusted R-squared:  0.8304 
-## F-statistic: 243.3 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 2.424 on 97 degrees of freedom
+## Multiple R-squared:  0.8623, Adjusted R-squared:  0.8595 
+## F-statistic: 303.7 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>So, even with the shape and rate paramters known with certainty, I don’t find the true parameter on the X2 variable.</p>
 <p>Lets run it a few times to make sure. It may show up as an expectation.</p>
 <pre class="r"><code>summary(replicate(400,lm(Y~X1+Augment(X2,2,2),data=Fake)$coef[3]))</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   1.295   1.486   1.558   1.560   1.630   1.900</code></pre>
+##   1.140   1.494   1.564   1.564   1.647   1.858</code></pre>
 <p>and the answer is no.</p>
 <div id="simulation-idea-but-with-discrete-overstatement" class="section level2">
 <h2>Simulation idea but with discrete overstatement</h2>
@@ -367,177 +367,165 @@ Fake$epsilon&lt;-rnorm(100)
 Fake$Y&lt;- 10 + 5*Fake$X1 + 3*Fake$XTrue +Fake$epsilon
 
 summary(Fake)</code></pre>
-<pre><code>##        X1               XTrue          Noise           X2      
-##  Min.   :-2.41846   Min.   :0.00   Min.   :0.0   Min.   :0.00  
-##  1st Qu.:-0.60282   1st Qu.:0.00   1st Qu.:0.0   1st Qu.:0.00  
-##  Median : 0.10703   Median :0.00   Median :1.0   Median :1.00  
-##  Mean   : 0.05796   Mean   :0.52   Mean   :0.6   Mean   :1.11  
-##  3rd Qu.: 0.66387   3rd Qu.:1.00   3rd Qu.:1.0   3rd Qu.:2.00  
-##  Max.   : 2.17997   Max.   :3.00   Max.   :2.0   Max.   :3.00  
-##     epsilon              Y          
-##  Min.   :-2.2248   Min.   :-0.2083  
-##  1st Qu.:-0.7812   1st Qu.: 7.8576  
-##  Median :-0.3351   Median :11.9430  
-##  Mean   :-0.1464   Mean   :11.7034  
-##  3rd Qu.: 0.4613   3rd Qu.:15.9696  
-##  Max.   : 2.8225   Max.   :25.0937</code></pre>
+<pre><code>##        X1               XTrue          Noise            X2     
+##  Min.   :-2.78545   Min.   :0.00   Min.   :0.00   Min.   :0.0  
+##  1st Qu.:-0.74066   1st Qu.:0.00   1st Qu.:0.00   1st Qu.:0.0  
+##  Median :-0.12939   Median :0.00   Median :0.00   Median :1.0  
+##  Mean   :-0.03491   Mean   :0.49   Mean   :0.41   Mean   :0.9  
+##  3rd Qu.: 0.71120   3rd Qu.:1.00   3rd Qu.:1.00   3rd Qu.:1.0  
+##  Max.   : 2.49046   Max.   :2.00   Max.   :2.00   Max.   :3.0  
+##     epsilon               Y         
+##  Min.   :-2.18812   Min.   :-4.205  
+##  1st Qu.:-0.65544   1st Qu.: 7.350  
+##  Median : 0.01023   Median :11.202  
+##  Mean   :-0.05383   Mean   :11.242  
+##  3rd Qu.: 0.52821   3rd Qu.:15.459  
+##  Max.   : 2.65733   Max.   :23.788</code></pre>
 <p>Test the sigmoid wrap</p>
 <pre class="r"><code>summary((Fake$X2-1)/(1-exp(-5*(Fake$X2-1))))</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-## 0.00678 0.00678 1.00700 0.64240 1.00700 2.00000      34</code></pre>
+## 0.00678 0.00678 0.00678 0.44710 1.00700 2.00000      41</code></pre>
 <pre class="r"><code>summary((Fake$X2-2)/(1-exp(-5*(Fake$X2-2))))</code></pre>
 <pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.     NA's 
-## 0.000091 0.000091 0.006784 0.101100 0.006784 1.007000       28</code></pre>
+## 0.000091 0.000091 0.006784 0.041270 0.006784 1.007000       20</code></pre>
 <pre class="r"><code>summary((Fake$X2-3)/(1-exp(-5*(Fake$X2-3))))</code></pre>
-<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.     NA's 
-## 0.000001 0.000001 0.000091 0.002076 0.006784 0.006784        7</code></pre>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.      NA's 
+## 0.0000009 0.0000009 0.0000908 0.0014370 0.0000908 0.0067840         3</code></pre>
 <p>Why NaN?</p>
 <pre class="r"><code>data.frame(Fake$X2, (Fake$X2-1)/(1-exp(-5*(Fake$X2-1))))</code></pre>
 <pre><code>##     Fake.X2 X.Fake.X2...1...1...exp..5....Fake.X2...1...
-## 1         1                                          NaN
+## 1         2                                  1.006783655
 ## 2         1                                          NaN
-## 3         1                                          NaN
-## 4         2                                  1.006783655
-## 5         0                                  0.006783655
-## 6         0                                  0.006783655
-## 7         1                                          NaN
-## 8         1                                          NaN
-## 9         0                                  0.006783655
+## 3         0                                  0.006783655
+## 4         1                                          NaN
+## 5         2                                  1.006783655
+## 6         1                                          NaN
+## 7         2                                  1.006783655
+## 8         0                                  0.006783655
+## 9         1                                          NaN
 ## 10        1                                          NaN
-## 11        2                                  1.006783655
+## 11        1                                          NaN
 ## 12        1                                          NaN
 ## 13        0                                  0.006783655
-## 14        2                                  1.006783655
-## 15        2                                  1.006783655
-## 16        2                                  1.006783655
-## 17        0                                  0.006783655
+## 14        1                                          NaN
+## 15        0                                  0.006783655
+## 16        0                                  0.006783655
+## 17        3                                  2.000090804
 ## 18        2                                  1.006783655
 ## 19        1                                          NaN
 ## 20        0                                  0.006783655
-## 21        0                                  0.006783655
-## 22        0                                  0.006783655
-## 23        0                                  0.006783655
-## 24        0                                  0.006783655
+## 21        3                                  2.000090804
+## 22        1                                          NaN
+## 23        1                                          NaN
+## 24        2                                  1.006783655
 ## 25        2                                  1.006783655
 ## 26        0                                  0.006783655
-## 27        2                                  1.006783655
+## 27        0                                  0.006783655
 ## 28        0                                  0.006783655
-## 29        1                                          NaN
+## 29        0                                  0.006783655
 ## 30        1                                          NaN
 ## 31        1                                          NaN
-## 32        0                                  0.006783655
+## 32        2                                  1.006783655
 ## 33        1                                          NaN
-## 34        3                                  2.000090804
-## 35        2                                  1.006783655
+## 34        0                                  0.006783655
+## 35        0                                  0.006783655
 ## 36        1                                          NaN
-## 37        1                                          NaN
-## 38        0                                  0.006783655
-## 39        2                                  1.006783655
-## 40        0                                  0.006783655
-## 41        2                                  1.006783655
+## 37        0                                  0.006783655
+## 38        1                                          NaN
+## 39        0                                  0.006783655
+## 40        1                                          NaN
+## 41        1                                          NaN
 ## 42        0                                  0.006783655
-## 43        0                                  0.006783655
-## 44        1                                          NaN
-## 45        2                                  1.006783655
-## 46        1                                          NaN
-## 47        3                                  2.000090804
-## 48        3                                  2.000090804
-## 49        2                                  1.006783655
-## 50        2                                  1.006783655
+## 43        2                                  1.006783655
+## 44        0                                  0.006783655
+## 45        1                                          NaN
+## 46        0                                  0.006783655
+## 47        2                                  1.006783655
+## 48        2                                  1.006783655
+## 49        1                                          NaN
+## 50        1                                          NaN
 ## 51        2                                  1.006783655
 ## 52        0                                  0.006783655
-## 53        1                                          NaN
-## 54        2                                  1.006783655
+## 53        2                                  1.006783655
+## 54        1                                          NaN
 ## 55        0                                  0.006783655
-## 56        1                                          NaN
+## 56        0                                  0.006783655
 ## 57        0                                  0.006783655
 ## 58        3                                  2.000090804
 ## 59        2                                  1.006783655
 ## 60        1                                          NaN
-## 61        2                                  1.006783655
-## 62        1                                          NaN
-## 63        1                                          NaN
+## 61        1                                          NaN
+## 62        0                                  0.006783655
+## 63        2                                  1.006783655
 ## 64        1                                          NaN
-## 65        3                                  2.000090804
-## 66        2                                  1.006783655
-## 67        0                                  0.006783655
-## 68        0                                  0.006783655
-## 69        3                                  2.000090804
-## 70        0                                  0.006783655
-## 71        1                                          NaN
+## 65        0                                  0.006783655
+## 66        0                                  0.006783655
+## 67        1                                          NaN
+## 68        1                                          NaN
+## 69        0                                  0.006783655
+## 70        2                                  1.006783655
+## 71        0                                  0.006783655
 ## 72        0                                  0.006783655
 ## 73        0                                  0.006783655
-## 74        1                                          NaN
-## 75        2                                  1.006783655
-## 76        1                                          NaN
+## 74        0                                  0.006783655
+## 75        0                                  0.006783655
+## 76        0                                  0.006783655
 ## 77        1                                          NaN
-## 78        1                                          NaN
-## 79        1                                          NaN
+## 78        2                                  1.006783655
+## 79        2                                  1.006783655
 ## 80        1                                          NaN
 ## 81        0                                  0.006783655
-## 82        1                                          NaN
-## 83        2                                  1.006783655
+## 82        0                                  0.006783655
+## 83        1                                          NaN
 ## 84        1                                          NaN
-## 85        2                                  1.006783655
-## 86        2                                  1.006783655
-## 87        2                                  1.006783655
-## 88        2                                  1.006783655
-## 89        2                                  1.006783655
+## 85        0                                  0.006783655
+## 86        1                                          NaN
+## 87        1                                          NaN
+## 88        1                                          NaN
+## 89        1                                          NaN
 ## 90        1                                          NaN
-## 91        3                                  2.000090804
-## 92        1                                          NaN
+## 91        0                                  0.006783655
+## 92        2                                  1.006783655
 ## 93        2                                  1.006783655
 ## 94        0                                  0.006783655
 ## 95        1                                          NaN
-## 96        2                                  1.006783655
-## 97        0                                  0.006783655
-## 98        0                                  0.006783655
-## 99        0                                  0.006783655
-## 100       0                                  0.006783655</code></pre>
+## 96        1                                          NaN
+## 97        1                                          NaN
+## 98        1                                          NaN
+## 99        1                                          NaN
+## 100       2                                  1.006783655</code></pre>
 <pre class="r"><code>(0)/(1-exp(-0))</code></pre>
 <pre><code>## [1] NaN</code></pre>
 <p>Because r does not know L’Hospital’s Rule. It breaks when the N is an integer value. We just need non-integer starting values</p>
 <p>Now lets try an estimator</p>
-<pre class="r"><code>summary(nls(Y~alpha+beta1*X1+beta2*(X2-N)/(1-exp(-10*(X2-N))),data=Fake, start=list(alpha=10,beta1=5, beta2=3, N=1.1)))</code></pre>
-<pre><code>## 
-## Formula: Y ~ alpha + beta1 * X1 + beta2 * (X2 - N)/(1 - exp(-10 * (X2 - 
-##     N)))
-## 
-## Parameters:
-##       Estimate Std. Error t value Pr(&gt;|t|)    
-## alpha   9.7769     0.3378  28.946  &lt; 2e-16 ***
-## beta1   4.7176     0.1836  25.688  &lt; 2e-16 ***
-## beta2   2.3415     0.3532   6.629 1.97e-09 ***
-## N       0.5897     0.2464   2.393   0.0187 *  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1.852 on 96 degrees of freedom
-## 
-## Number of iterations to convergence: 5 
-## Achieved convergence tolerance: 3.934e-06</code></pre>
-<pre class="r"><code>summary(lm(Y~X1+X2,data=Fake))</code></pre>
+<pre class="r"><code># summary(nls(Y~alpha+beta1*X1+beta2*(X2-N)/(1-exp(-10*(X2-N))),data=Fake, start=list(alpha=10,beta1=5, beta2=3, N=1.1)))
+
+summary(lm(Y~X1+X2,data=Fake))</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X1 + X2, data = Fake)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -3.4547 -1.5445 -0.1136  1.3034  5.6092 
+## -3.3905 -0.9635 -0.1267  0.9272  3.3084 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   9.4520     0.2938  32.168  &lt; 2e-16 ***
-## X1            4.6691     0.1849  25.256  &lt; 2e-16 ***
-## X2            1.7845     0.2031   8.784 5.64e-14 ***
+## (Intercept)   9.8709     0.2233  44.207  &lt; 2e-16 ***
+## X1            5.0906     0.1370  37.169  &lt; 2e-16 ***
+## X2            1.7204     0.1839   9.354 3.33e-15 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 1.882 on 97 degrees of freedom
-## Multiple R-squared:  0.8809, Adjusted R-squared:  0.8785 
-## F-statistic: 358.8 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 1.502 on 97 degrees of freedom
+## Multiple R-squared:  0.9363, Adjusted R-squared:  0.935 
+## F-statistic: 713.3 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>This has a fragile convergence radius. You need to be pretty close to get it to work. The other thing is that the assumption of an average amount for each, homogenous reduction, is messing things up.</p>
 <p>Need to work on the probability of reduction like a tobit model. A puzzle for another day.</p>
+</div>
+<div id="different-levels-of-overstatement-by-level" class="section level2">
+<h2>Different levels of overstatement by level</h2>
+<p>Back with another idea…lets have the cheating paramters be different depending on the observed score.</p>
 </div>
 </div>
 
