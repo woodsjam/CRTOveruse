@@ -273,4 +273,31 @@ summary(nls(Y~alpha+beta1*X1+beta23*I(X2==3)*(X2-N3)/(1-exp(-10*(X2-N3))) +beta2
 
 
 ```
+Good idea but it will not converge. 
 
+Lets deal with the point discontinuity.
+
+## Point discontinuity
+
+
+This should fix the point discontinuity.
+```{r}
+wrap<-function(val,N){
+  ret<-.1
+  if(N!=val) {
+    ret<- (val-N)/(1- exp (-10 * (val-N)))
+  }
+  ret
+}
+
+Wrap<-Vectorize(wrap)
+```
+
+Try the regressions again
+```{r}
+
+```
+
+summary(nls(Y~alpha+beta1*X1+beta2*Wrap(X2,N),data=Fake, start=list(alpha=10,beta1=5, beta2=3, N=1.1),trace=TRUE))
+
+summary(lm(Y~X1+X2,data=Fake))
